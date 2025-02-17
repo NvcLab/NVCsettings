@@ -1,0 +1,11 @@
+application:
+  app_name: str
+  app_version: str
+  logging:
+    console:
+      enabled: bool
+    file:
+      enabled: bool
+secrets:
+  api_key: str
+  db_password: str
