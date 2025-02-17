@@ -32,7 +32,7 @@ class ConfigurationFileLoader:
             logger.error(f"Invalid file format for {file_path}: {ve}")
             raise
         except Exception as e:
-            logger.exception(f"Unexpected error while loading file {file_path}: {e}")  # Use logger.exception
+            logger.exception(f"Unexpected error while loading file {file_path}: {e}")
             raise
 
     @staticmethod
@@ -109,7 +109,6 @@ class ApplicationConfig(BaseSettings):
 
 class SecretConfig(BaseSettings):
     class Config:
-        env_file = Path(__file__).parent / ".env"
         env_file_encoding = "utf-8"
         extra = "allow"
 
@@ -122,12 +121,13 @@ class AppSettings:
     application: ApplicationConfig
     secrets: SecretConfig
 
-    def __init__(self, config_file_path: Optional[str] = None, schema_file_path: Optional[str] = None):
+    def __init__(self, config_file_path: Optional[str] = None, schema_file_path: Optional[str] = None, dotenv_file_path: Optional[str] = None):
         self.application = self._load_application_config(config_file_path, schema_file_path)
-        self.secrets = SecretConfig()
+        self.secrets = SecretConfig(_env_file=dotenv_file_path)
         self._validate_secrets(schema_file_path)
 
-    def _load_application_config(self, config_file_path: Optional[str], schema_file_path: Optional[str]) -> ApplicationConfig:
+    def _load_application_config(self, config_file_path: Optional[str],
+                                 schema_file_path: Optional[str]) -> ApplicationConfig:
         if config_file_path:
             app_schema = self._load_schema_section(schema_file_path, "application")
             return ApplicationConfig.load_from_file(config_file_path, schema=app_schema)
@@ -153,8 +153,8 @@ class AppSettings:
 
 
 @lru_cache(maxsize=None)
-def get_app_settings(config_file_path: Optional[str] = None, schema_file_path: Optional[str] = None) -> AppSettings:
-    return AppSettings(config_file_path, schema_file_path)
+def get_app_settings(config_file_path: Optional[str] = None, schema_file_path: Optional[str] = None, dotenv_file_path: Optional[str] = None) -> AppSettings:
+    return AppSettings(config_file_path, schema_file_path, dotenv_file_path)
 
 
 def configure_logging(config: dict) -> None:
@@ -177,7 +177,8 @@ def configure_logging(config: dict) -> None:
 def _configure_console_logging(console_config: dict) -> None:
     if console_config.get("enabled", False):
         console_format = console_config.get(
-            "format", "<green>{time}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>"
+            "format",
+            "<green>{time}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>"
         )
         console_level = console_config.get("level", "DEBUG").upper()
         time_format = console_config.get("time_format", "YYYY-MM-DD HH:mm:ss.SSS")

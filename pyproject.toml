@@ -1,0 +1,11 @@
+[project]
+name = "nvcsettings"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.13"
+dependencies = [
+    "loguru>=0.7.3",
+    "pydantic-settings>=2.7.1",
+    "pyyaml>=6.0.2",
+    "toml>=0.10.2",
+]

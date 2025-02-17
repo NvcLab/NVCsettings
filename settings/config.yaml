@@ -1,9 +1,8 @@
-app_name: "MyApp"
-app_version: "1.0.0"
+app_name: "NVCLab"
 app:
-  type: "test"
-  val:
-    test1: "testVal"
+  app_version: "1.0.0"
+  example_key:
+    key: "example_value"
 
 logging:
   console:
