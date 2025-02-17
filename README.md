@@ -1,4 +1,5 @@
 # Table of Contents
+- [Installation](#installation)
 - [Supported Configuration File Formats](#supported-configuration-file-formats)
 - [Configuration File Examples](#configuration-file-examples)
   - [YAML Example](#yaml-example)
@@ -6,8 +7,21 @@
   - [TOML Example](#toml-example)
   - [Dotenv Example](#dotenv-example)
 - [Schema File Example](#schema-file-example)
+  - [YAML Schema Example](#yaml-schema-example)
+  - [JSON Schema Example](#json-schema-example)
+  - [TOML Schema Example](#toml-schema-example)
 - [Usage Example](#usage-example)
 - [Important Usage Notes](#important-usage-notes)
+
+## Installation
+
+To install the required dependencies, make sure you have Python installed. You can use `uv` to create and manage your virtual environment and install dependencies. For detailed instructions, refer to the [official UV installation guide](https://docs.astral.sh/uv/getting-started/installation/).
+
+To install the dependencies and create the environment, run the following command:
+
+```sh
+uv sync
+```
 
 ## Supported Configuration File Formats
 
@@ -48,7 +62,8 @@ logging:
 
 ### JSON Example
 
-Create a `config.json` file with the following content:
+<details>
+<summary>Create a <code>config.json</code> file with the following content:</summary>
 
 ```json name=config.json
 {
@@ -78,10 +93,12 @@ Create a `config.json` file with the following content:
   }
 }
 ```
+</details>
 
 ### TOML Example
 
-Create a `config.toml` file with the following content:
+<details>
+<summary>Create a <code>config.toml</code> file with the following content:</summary>
 
 ```toml name=config.toml
 app_name = "MyApp"
@@ -107,6 +124,7 @@ time_format = "YYYY-MM-DD HH:mm:ss.SSS"
 rotation = "10 MB"
 compression = "zip"
 ```
+</details>
 
 ### Dotenv Example
 
@@ -119,7 +137,9 @@ DATABASE_URL="postgres://user:password@localhost:5432/mydatabase"
 
 ## Schema File Example
 
-Create a `schema.yaml` file with the following content to define the schema for validation:
+### YAML Schema Example
+
+Create a `schema.yaml` file with the following content:
 
 ```yaml name=schema.yaml
 application:
@@ -147,6 +167,83 @@ secrets:
   SECRET_KEY: "str"
   DATABASE_URL: "str"
 ```
+
+### JSON Schema Example
+
+<details>
+<summary>Create a <code>schema.json</code> file with the following content:</summary>
+
+```json name=schema.json
+{
+  "application": {
+    "app_name": "str",
+    "app": {
+      "app_version": "str",
+      "example_key": {
+        "key": "str"
+      }
+    },
+    "logging": {
+      "console": {
+        "enabled": "bool",
+        "level": "str",
+        "format": "str",
+        "time_format": "str"
+      },
+      "file": {
+        "enabled": "bool",
+        "file_path": "str",
+        "level": "str",
+        "format": "str",
+        "time_format": "str",
+        "rotation": "str",
+        "compression": "str"
+      }
+    }
+  },
+  "secrets": {
+    "SECRET_KEY": "str",
+    "DATABASE_URL": "str"
+  }
+}
+```
+</details>
+
+### TOML Schema Example
+
+<details>
+<summary>Create a <code>schema.toml</code> file with the following content:</summary>
+
+```toml name=schema.toml
+[application]
+app_name = "str"
+
+[application.app]
+app_version = "str"
+
+[application.app.example_key]
+key = "str"
+
+[application.logging.console]
+enabled = "bool"
+level = "str"
+format = "str"
+time_format = "str"
+
+[application.logging.file]
+enabled = "bool"
+file_path = "str"
+level = "str"
+format = "str"
+time_format = "str"
+rotation = "str"
+compression = "str"
+
+[secrets]
+SECRET_KEY = "str"
+DATABASE_URL = "str"
+```
+</details>
 
 ## Usage Example
 
